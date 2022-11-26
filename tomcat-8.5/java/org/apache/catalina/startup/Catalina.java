@@ -273,6 +273,7 @@ public class Catalina {
     /**
      * Create and configure the Digester we will be using for startup.
      * @return the main digester to parse server.xml
+     * todo：Digester 根据XML生成树
      */
     protected Digester createStartDigester() {
         long t1=System.currentTimeMillis();

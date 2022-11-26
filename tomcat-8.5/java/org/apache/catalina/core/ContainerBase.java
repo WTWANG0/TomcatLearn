@@ -1138,6 +1138,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
      * Execute a periodic task, such as reloading, etc. This method will be
      * invoked inside the classloading context of this container. Unexpected
      * throwables will be caught and logged.
+     * todo:执行周期性任务
      */
     @Override
     public void backgroundProcess() {
@@ -1296,6 +1297,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
         if (thread != null) {
             return;
         }
+        //TODO: 后台执行线程
         if (backgroundProcessorDelay <= 0) {
             return;
         }
@@ -1401,6 +1403,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
                 container.backgroundProcess();
                 Container[] children = container.findChildren();
                 for (Container child : children) {
+                    //todo： 如果子容器有后台执行先，即 >0 那么不需要父容器处理，否则交由父容器处理
                     if (child.getBackgroundProcessorDelay() <= 0) {
                         processChildren(child);
                     }
