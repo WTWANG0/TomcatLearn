@@ -46,6 +46,9 @@ import org.apache.tomcat.util.net.SocketEvent;
 import org.apache.tomcat.util.net.SocketWrapperBase;
 import org.apache.tomcat.util.res.StringManager;
 
+/**
+ * TODO:协议模板方法
+ * */
 public abstract class AbstractProtocol<S> implements ProtocolHandler,
         MBeanRegistration {
 
@@ -490,6 +493,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
      * implementation.
      *
      * @return A fully configured Processor instance that is ready to use
+     * TODO:Processor
      */
     protected abstract Processor createProcessor();
 

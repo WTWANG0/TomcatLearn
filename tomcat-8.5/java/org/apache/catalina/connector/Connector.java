@@ -77,8 +77,11 @@ public class Connector extends LifecycleMBeanBase  {
     }
 
 
+    /**
+     * TODO: 协议升级，在原有协议的基础上进行升级
+     * */
     public Connector(String protocol) {
-        setProtocol(protocol);
+        setProtocol(protocol); //TODO: 协议是定义数据格式的规范
         // Instantiate protocol handler
         ProtocolHandler p = null;
         try {
