@@ -530,6 +530,7 @@ public class Catalina {
     /**
      * Start a new server instance.
      *  启动一个Server实例
+     *  TODO: 创建对象树，调用生命周期的init方法，初始化整个对象树
      */
     public void load() {
 
@@ -552,7 +553,7 @@ public class Catalina {
         InputSource inputSource = null;
         InputStream inputStream = null;
         File file = null;
-        try {
+        try { //TODO: 构建server.xml输入流
             try {
                 file = configFile();
                 inputStream = new FileInputStream(file);
@@ -612,6 +613,7 @@ public class Catalina {
             try {
                 inputSource.setByteStream(inputStream);
                 digester.push(this);
+                //TODO: 当这段代码执行完毕，server.xml定义的整个对象树以及监听器等等都会按照digester定义的规则创建好
                 digester.parse(inputSource);
             } catch (SAXParseException spe) {
                 log.warn("Catalina.start using " + getConfigFile() + ": " +
@@ -623,7 +625,7 @@ public class Catalina {
             }
         } finally {
             if (inputStream != null) {
-                try {
+                try { //TODO: 关闭流
                     inputStream.close();
                 } catch (IOException e) {
                     // Ignore
@@ -631,14 +633,17 @@ public class Catalina {
             }
         }
 
+        //TODO:设置server对象属性
         getServer().setCatalina(this);
         getServer().setCatalinaHome(Bootstrap.getCatalinaHomeFile());
         getServer().setCatalinaBase(Bootstrap.getCatalinaBaseFile());
 
         // Stream redirection
+        //TODO: 重定向系统输入输出流
         initStreams();
 
         // 启动Server 服务
+        //TODO: 进入整个对象树的生命周期流程
         try {
             getServer().init(); // 完成 Server  Service Engine Connector等组件的init操作
         } catch (LifecycleException e) {
@@ -706,6 +711,7 @@ public class Catalina {
         }
 
         // Register shutdown hook
+        //TODO: jvm退出钩子
         if (useShutdownHook) {
             if (shutdownHook == null) {
                 shutdownHook = new CatalinaShutdownHook();

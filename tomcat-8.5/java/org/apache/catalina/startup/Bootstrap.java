@@ -452,6 +452,7 @@ public final class Bootstrap {
      * Main method and entry point when starting Tomcat via the provided
      * scripts.
      * 通过脚本启动Tomcat时的主方法和入口点
+     * 间接调用Catalina，创建对象树，调用生命周期短init方法初始化整个对象树
      *
      * @param args Command line arguments to be processed
      */
