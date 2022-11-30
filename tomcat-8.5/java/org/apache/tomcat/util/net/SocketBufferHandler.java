@@ -33,7 +33,7 @@ public class SocketBufferHandler {
     public SocketBufferHandler(int readBufferSize, int writeBufferSize,
             boolean direct) {
         this.direct = direct;
-        if (direct) {
+        if (direct) { //TODO:设置默认为true提高性能，前提是调高直接缓冲区大小
             readBuffer = ByteBuffer.allocateDirect(readBufferSize);
             writeBuffer = ByteBuffer.allocateDirect(writeBufferSize);
         } else {

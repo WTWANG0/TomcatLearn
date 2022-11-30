@@ -178,6 +178,9 @@ public class SocketProperties {
     private ObjectName oname = null;
 
 
+    /**
+     * 设置属性
+     * */
     public void setProperties(Socket socket) throws SocketException{
         if (rxBufSize != null) {
             socket.setReceiveBufferSize(rxBufSize.intValue());
