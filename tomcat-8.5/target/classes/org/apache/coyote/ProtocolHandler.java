@@ -22,7 +22,7 @@ import org.apache.tomcat.util.net.SSLHostConfig;
 
 /**
  * Abstract the protocol implementation, including threading, etc.
- *
+ * coyote
  * This is the main interface to be implemented by a coyote protocol.
  * Adapter is the main interface to be implemented by a coyote servlet
  * container.
@@ -36,6 +36,7 @@ public interface ProtocolHandler {
     /**
      * Return the adapter associated with the protocol handler.
      * @return the adapter
+     * TODO: 适配tomcat原生的request response 到 servlet处理的request response
      */
     public Adapter getAdapter();
 

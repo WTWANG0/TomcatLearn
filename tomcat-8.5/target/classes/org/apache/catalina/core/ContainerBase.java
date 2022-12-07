@@ -157,13 +157,14 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
 
 
     /**
-     * The child Containers belonging to this Container, keyed by name.
+     * The child Containers belonging to this Container, keyed by name.<子容器名-子容器></>
      */
     protected final HashMap<String, Container> children = new HashMap<>();
 
 
     /**
      * The processor delay for this component.
+     * 执行后台周期性任务的周期时间
      */
     protected int backgroundProcessorDelay = -1;
 
@@ -173,6 +174,10 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
      * CopyOnWriteArrayList since listeners may invoke methods to add/remove
      * themselves or other listeners and with a ReadWriteLock that would trigger
      * a deadlock.
+     * todo：读写锁弊端。当一个线程需要遍历监听器的时候，需要获取读锁，然后调用监听器的方法，该方法中
+     * todo：又需要删除listeners列表的某个监听器，由于此时是需要修改listeners，所以需要获取写锁
+     * todo：此时读锁由当前线程持有，线程在获取写锁的acquire操作调用tryAcqire，返回false，自我阻塞当前线程
+     * todo：从而造成死锁，再也没有其他线程可以获取写锁
      */
     protected final List<ContainerListener> listeners = new CopyOnWriteArrayList<>();
 
@@ -1133,6 +1138,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
      * Execute a periodic task, such as reloading, etc. This method will be
      * invoked inside the classloading context of this container. Unexpected
      * throwables will be caught and logged.
+     * todo:执行周期性任务
      */
     @Override
     public void backgroundProcess() {
@@ -1291,7 +1297,8 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
         if (thread != null) {
             return;
         }
-        if (backgroundProcessorDelay <= 0) {
+        //TODO: 后台执行线程
+        if (backgroundProcessorDelay <= 0) { //由父容器进行周期处理
             return;
         }
 
@@ -1396,6 +1403,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
                 container.backgroundProcess();
                 Container[] children = container.findChildren();
                 for (Container child : children) {
+                    //todo： 如果子容器有后台执行先，即 >0 那么不需要父容器处理，否则交由父容器处理
                     if (child.getBackgroundProcessorDelay() <= 0) {
                         processChildren(child);
                     }

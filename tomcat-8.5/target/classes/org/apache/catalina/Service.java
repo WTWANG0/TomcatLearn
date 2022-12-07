@@ -21,7 +21,7 @@ import org.apache.catalina.mapper.Mapper;
 
 /**
  * A <strong>Service</strong> is a group of one or more
- * <strong>Connectors</strong> that share a single <strong>Container</strong>
+ * <strong>Connectors</strong> that share a single <strong>Container 引擎</strong>
  * to process their incoming requests.  This arrangement allows, for example,
  * a non-SSL and SSL connector to share the same population of web apps.
  * <p>

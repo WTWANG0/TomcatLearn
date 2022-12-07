@@ -4999,7 +4999,7 @@ public class StandardContext extends ContainerBase
         }
 
         // Post work directory
-        postWorkDirectory();
+        postWorkDirectory(); //执行工作目录
 
         // Add missing components as necessary
         if (getResources() == null) {   // (1) Required by Loader

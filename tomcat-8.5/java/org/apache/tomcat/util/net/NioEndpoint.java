@@ -98,6 +98,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
 
     /**
      * Cache for poller events
+     * TODO: 同步栈做缓存
      */
     private SynchronizedStack<PollerEvent> eventCache;
 
@@ -923,6 +924,9 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
             getStopLatch().countDown();
         }
 
+        /**
+         * TODO:
+         * */
         protected void processKey(SelectionKey sk, NioSocketWrapper attachment) {
             try {
                 if (close) {
@@ -1168,7 +1172,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
         private volatile long lastWrite = lastRead;
         private volatile boolean closed = false;
 
-        
+
         public NioSocketWrapper(NioChannel channel, NioEndpoint endpoint) {
             super(channel, endpoint);
             pool = endpoint.getSelectorPool();

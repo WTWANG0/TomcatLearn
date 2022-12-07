@@ -80,6 +80,7 @@ public class Http11Processor extends AbstractProcessor {
 
     /**
      * Input.
+     * TODO: 缓冲区
      */
     protected final Http11InputBuffer inputBuffer;
 

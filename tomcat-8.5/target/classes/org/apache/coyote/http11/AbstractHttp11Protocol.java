@@ -51,11 +51,16 @@ import org.apache.tomcat.util.net.SSLHostConfig;
 import org.apache.tomcat.util.net.SocketWrapperBase;
 import org.apache.tomcat.util.res.StringManager;
 
+
+/**
+ *
+ * */
 public abstract class AbstractHttp11Protocol<S> extends AbstractProtocol<S> {
 
     protected static final StringManager sm =
             StringManager.getManager(AbstractHttp11Protocol.class);
 
+    //TODO: http 1.1 压缩响应体  http2.0 增加了压缩头部信息
     private final CompressionConfig compressionConfig = new CompressionConfig();
 
 
@@ -73,6 +78,7 @@ public abstract class AbstractHttp11Protocol<S> extends AbstractProtocol<S> {
         // Upgrade protocols have to be configured first since the endpoint
         // init (triggered via super.init() below) uses this list to configure
         // the list of ALPN protocols to advertise
+        //TODO： 初始化升级组件
         for (UpgradeProtocol upgradeProtocol : upgradeProtocols) {
             configureUpgradeProtocol(upgradeProtocol);
         }

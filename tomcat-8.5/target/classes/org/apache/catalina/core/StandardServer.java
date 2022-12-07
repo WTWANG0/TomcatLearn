@@ -385,15 +385,16 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
      * Wait until a proper shutdown command is received, then return.
      * This keeps the main thread alive - the thread pool listening for http
      * connections is daemon threads.
+     * TODO : AWAIT 作用
      */
     @Override
     public void await() {
         // Negative values - don't wait on port - tomcat is embedded or we just don't like ports
-        if (port == -2) {
+        if (port == -2) { //TODO:内嵌的tomcat不需要自身管理操作，交由spring处理
             // undocumented yet - for embedding apps that are around, alive.
             return;
         }
-        if (port==-1) {
+        if (port==-1) { //TODO:原生的，执行本地变量阻塞等待
             try {
                 awaitThread = Thread.currentThread();
                 while(!stopAwait) {
@@ -802,6 +803,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
         // Note although the cache is global, if there are multiple Servers
         // present in the JVM (may happen when embedding) then the same cache
         // will be registered under multiple names
+        //TODO: 注册到JMX
         onameStringCache = register(new StringCache(), "type=StringCache");
 
         // Register the MBeanFactory
@@ -815,7 +817,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
         // Populate the extension validator with JARs from common and shared
         // class loaders
         if (getCatalina() != null) {
-            ClassLoader cl = getCatalina().getParentClassLoader();
+            ClassLoader cl = getCatalina().getParentClassLoader(); //TODO: common class loader
             // Walk the class loader hierarchy. Stop at the system class loader.
             // This will add the shared (if present) and common class loaders
             while (cl != null && cl != ClassLoader.getSystemClassLoader()) {
@@ -839,6 +841,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
             }
         }
         // Initialize our defined Services
+        //TODO: 初始化service 组件
         for (Service service : services) {
             service.init();
         }

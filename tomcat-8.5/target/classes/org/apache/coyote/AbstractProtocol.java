@@ -46,6 +46,9 @@ import org.apache.tomcat.util.net.SocketEvent;
 import org.apache.tomcat.util.net.SocketWrapperBase;
 import org.apache.tomcat.util.res.StringManager;
 
+/**
+ * TODO:协议模板方法
+ * */
 public abstract class AbstractProtocol<S> implements ProtocolHandler,
         MBeanRegistration {
 
@@ -490,6 +493,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
      * implementation.
      *
      * @return A fully configured Processor instance that is ready to use
+     * TODO:Processor
      */
     protected abstract Processor createProcessor();
 
@@ -577,6 +581,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
             getLog().info(sm.getString("abstractProtocolHandler.init", getName()));
         }
 
+        //TODO: register都是与JMX相关
         if (oname == null) {
             // Component not pre-registered so register it
             oname = createObjectName();
@@ -596,6 +601,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
         endpoint.setName(endpointName.substring(1, endpointName.length()-1));
         endpoint.setDomain(domain);
 
+        //TODO: 初始化endPoint
         endpoint.init();
     }
 
@@ -609,6 +615,8 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
         endpoint.start();
 
         // Start timeout thread
+        //TODO: servlet异步处理，servlet3.0， start Async context
+        //TODO: 检测异步超时线程
         asyncTimeout = new AsyncTimeout();
         Thread timeoutThread = new Thread(asyncTimeout, getNameInternal() + "-AsyncTimeout");
         int priority = endpoint.getThreadPriority();

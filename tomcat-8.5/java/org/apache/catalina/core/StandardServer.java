@@ -73,7 +73,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
     public StandardServer() {
 
         super();
-
+        //TODO: 初始化JNDI支持操作
         globalNamingResources = new NamingResourcesImpl();
         globalNamingResources.setContainer(this);
 
@@ -340,6 +340,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
         service.setServer(this);
 
         synchronized (servicesLock) {
+            //todo：为什么写下面这么复杂的代码：因为下面写法是可变数组的底层实现
             Service results[] = new Service[services.length + 1];
             System.arraycopy(services, 0, results, 0, services.length);
             results[services.length] = service;
@@ -352,7 +353,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
                     // Ignore
                 }
             }
-
+            // todo:触发service属性变化事件
             // Report this property change to interested listeners
             support.firePropertyChange("service", null, service);
         }
@@ -372,7 +373,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
                     // Ignored
                 }
             }
-            t.interrupt();
+            t.interrupt();//唤醒awaitThread，等待完毕
             try {
                 t.join(1000);
             } catch (InterruptedException e) {
@@ -814,7 +815,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
         // Register the naming resources
         globalNamingResources.init();
 
-        // Populate the extension validator with JARs from common and shared
+        // Populate 填充 the extension validator with JARs from common and shared
         // class loaders
         if (getCatalina() != null) {
             ClassLoader cl = getCatalina().getParentClassLoader(); //TODO: common class loader
@@ -829,7 +830,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
                                 File f = new File (url.toURI());
                                 if (f.isFile() &&
                                         f.getName().endsWith(".jar")) {
-                                    ExtensionValidator.addSystemResource(f);
+                                    ExtensionValidator.addSystemResource(f);//校验jar
                                 }
                             } catch (URISyntaxException | IOException e) {
                                 // Ignore

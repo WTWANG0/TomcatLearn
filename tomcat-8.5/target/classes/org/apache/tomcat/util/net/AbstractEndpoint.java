@@ -55,6 +55,8 @@ import org.apache.tomcat.util.threads.ThreadPoolExecutor;
  *
  * @author Mladen Turk
  * @author Remy Maucherat
+ *
+ * EndPoint 端点，接收客户端连接
  */
 public abstract class AbstractEndpoint<S> {
 
@@ -446,6 +448,7 @@ public abstract class AbstractEndpoint<S> {
 
     /**
      * Acceptor thread count.
+     * TODO； 接收线程
      */
     protected int acceptorThreadCount = 1;
 
@@ -684,6 +687,7 @@ public abstract class AbstractEndpoint<S> {
 
     /**
      * Maximum amount of worker threads.
+     * TODO: maxThreads 默认200
      */
     private int maxThreads = 200;
     public void setMaxThreads(int maxThreads) {
@@ -1237,6 +1241,9 @@ public abstract class AbstractEndpoint<S> {
         startInternal();
     }
 
+    /**
+     * TODO: 启动线程，接收对象
+     * */
     protected final void startAcceptorThreads() {
         int count = getAcceptorThreadCount();
         acceptors = new Acceptor[count];
@@ -1323,8 +1330,12 @@ public abstract class AbstractEndpoint<S> {
         connectionLimitLatch = null;
     }
 
+    /**
+     * TODO:
+     *
+     * */
     protected void countUpOrAwaitConnection() throws InterruptedException {
-        if (maxConnections==-1) {
+        if (maxConnections==-1) { //不开启线程
             return;
         }
         LimitLatch latch = connectionLimitLatch;
@@ -1333,6 +1344,11 @@ public abstract class AbstractEndpoint<S> {
         }
     }
 
+
+    /**
+     * TODO:
+     *
+     * */
     protected long countDownConnection() {
         if (maxConnections==-1) {
             return -1;

@@ -27,6 +27,8 @@ import org.apache.juli.logging.LogFactory;
  * Shared latch that allows the latch to be acquired a limited number of times
  * after which all subsequent requests to acquire the latch will be placed in a
  * FIFO queue until one of the shares is returned.
+ * TODO: 1-超过limit的连接需要被阻塞 2-值可以增大或减少
+ * TODO: 1 超过limit阻塞  2 允许多线程进入  3 允许多线程同时增加
  */
 public class LimitLatch {
 
@@ -38,6 +40,10 @@ public class LimitLatch {
         public Sync() {
         }
 
+
+        /**
+         * TODO: Shared
+         * */
         @Override
         protected int tryAcquireShared(int ignored) {
             long newCount = count.incrementAndGet();
@@ -50,6 +56,9 @@ public class LimitLatch {
             }
         }
 
+        /**
+         * TODO: Shared
+         * */
         @Override
         protected boolean tryReleaseShared(int arg) {
             count.decrementAndGet();
@@ -58,7 +67,7 @@ public class LimitLatch {
     }
 
     private final Sync sync;
-    private final AtomicLong count;
+    private final AtomicLong count; //TODO:当前连接数量
     private volatile long limit;
     private volatile boolean released = false;
 
@@ -109,6 +118,7 @@ public class LimitLatch {
      * Acquires a shared latch if one is available or waits for one if no shared
      * latch is current available.
      * @throws InterruptedException If the current thread is interrupted
+     * TODO:
      */
     public void countUpOrAwait() throws InterruptedException {
         if (log.isDebugEnabled()) {
@@ -120,6 +130,7 @@ public class LimitLatch {
     /**
      * Releases a shared latch, making it available for another thread to use.
      * @return the previous counter value
+     * TODO: 来一次请求
      */
     public long countDown() {
         sync.releaseShared(0);

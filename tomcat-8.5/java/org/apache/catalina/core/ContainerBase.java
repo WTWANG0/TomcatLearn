@@ -1298,7 +1298,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
             return;
         }
         //TODO: 后台执行线程
-        if (backgroundProcessorDelay <= 0) {
+        if (backgroundProcessorDelay <= 0) { //由父容器进行周期处理
             return;
         }
 

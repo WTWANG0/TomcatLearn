@@ -273,7 +273,8 @@ public class Catalina {
     /**
      * Create and configure the Digester we will be using for startup.
      * @return the main digester to parse server.xml
-     * todo：Digester 根据XML生成树
+     * TODO:配置文件.xml，每一个节点代表一个组件，组件是一个对象 --->节点是一个对象，节点的属性等价于对象的属性
+     * TODO：Digester 根据XML生成树
      */
     protected Digester createStartDigester() {
         long t1=System.currentTimeMillis();
@@ -728,6 +729,7 @@ public class Catalina {
             }
         }
 
+        //主线程等级关闭信号
         if (await) {
             await();
             stop();

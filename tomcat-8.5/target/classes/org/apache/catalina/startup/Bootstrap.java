@@ -140,6 +140,14 @@ public final class Bootstrap {
     // -------------------------------------------------------- Private Methods
 
 
+    /**
+     * todo:三个类加载器
+     * commonLoader
+     * catalinaLoader
+     * sharedLoader
+     *
+     * todo: WebappClassLoader
+     * */
     private void initClassLoaders() {
         try {
             // 创建 commonLoader
@@ -248,6 +256,7 @@ public final class Bootstrap {
     /**
      * Initialize daemon.
      * @throws Exception Fatal initialization error
+     * todo：初始化类加载器
      */
     public void init() throws Exception {
         // 创建相关的类加载器
@@ -261,7 +270,9 @@ public final class Bootstrap {
         if (log.isDebugEnabled()) {
             log.debug("Loading startup class");
         }
-        // 通过反射创建了 Catalina 类对象
+        // 通过反射创建了 Catalina 类对象:
+        // todo：决定使用哪个类加载器，当前类加载器 system class loader，如果直接使用new catalina那么在system class load中加载
+        // todo：如果使用反射，那么就在catalinaLoader中加载
         Class<?> startupClass = catalinaLoader
             .loadClass("org.apache.catalina.startup.Catalina");
         // 创建了 Catalina 实例
@@ -441,6 +452,7 @@ public final class Bootstrap {
      * Main method and entry point when starting Tomcat via the provided
      * scripts.
      * 通过脚本启动Tomcat时的主方法和入口点
+     * 间接调用Catalina，创建对象树，调用生命周期短init方法初始化整个对象树
      *
      * @param args Command line arguments to be processed
      */

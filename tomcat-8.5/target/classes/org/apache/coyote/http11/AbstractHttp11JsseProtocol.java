@@ -19,6 +19,9 @@ package org.apache.coyote.http11;
 import org.apache.tomcat.util.net.AbstractJsseEndpoint;
 import org.apache.tomcat.util.net.openssl.OpenSSLImplementation;
 
+/**
+ * TODO:
+ * */
 public abstract class AbstractHttp11JsseProtocol<S>
         extends AbstractHttp11Protocol<S> {
 

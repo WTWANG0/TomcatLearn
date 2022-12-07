@@ -80,10 +80,14 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
 
     // ----------------------------------------------------------------- Fields
 
+    /**
+     *
+     * */
     private NioSelectorPool selectorPool = new NioSelectorPool();
 
     /**
      * Server socket "pointer".
+     * TODO: bind 创建 ServerSocketChannel
      */
     private volatile ServerSocketChannel serverSock = null;
 
@@ -94,6 +98,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
 
     /**
      * Cache for poller events
+     * TODO: 同步栈做缓存
      */
     private SynchronizedStack<PollerEvent> eventCache;
 
@@ -142,6 +147,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
 
     /**
      * Poller thread count.
+     * TODO: poller 2
      */
     private int pollerThreadCount = Math.min(2,Runtime.getRuntime().availableProcessors());
     public void setPollerThreadCount(int pollerThreadCount) { this.pollerThreadCount = pollerThreadCount; }
@@ -229,6 +235,8 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                 throw new IllegalArgumentException(sm.getString("endpoint.init.bind.inherited"));
             }
         }
+
+        //TODO: 只做连接，而非NIO
         serverSock.configureBlocking(true); //mimic APR behavior
 
         // Initialize thread count defaults for acceptor, poller
@@ -406,10 +414,11 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
             //disable blocking, APR style, we are gonna be polling it
             socket.configureBlocking(false);
             Socket sock = socket.socket();
-            socketProperties.setProperties(sock);
+            socketProperties.setProperties(sock); //设置socket属性
 
             NioChannel channel = nioChannels.pop();
             if (channel == null) {
+                //TODO: JVM对socket缓冲区的加强缓冲
                 SocketBufferHandler bufhandler = new SocketBufferHandler(
                         socketProperties.getAppReadBufSize(),
                         socketProperties.getAppWriteBufSize(),
@@ -423,7 +432,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                 channel.setIOChannel(socket);
                 channel.reset();
             }
-            getPoller0().register(channel);
+            getPoller0().register(channel); //TODO: 丢给poller
         } catch (Throwable t) {
             ExceptionUtils.handleThrowable(t);
             try {
@@ -531,7 +540,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                     if (running && !paused) {
                         // setSocketOptions() will hand the socket off to
                         // an appropriate processor if successful
-                        if (!setSocketOptions(socket)) {
+                        if (!setSocketOptions(socket)) { //todo: 对消息进行处理
                             closeSocket(socket);
                         }
                     } else {
@@ -764,10 +773,11 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
          * Registers a newly created socket with the poller.
          *
          * @param socket    The newly created socket
+         * TODO: important
          */
         public void register(final NioChannel socket) {
             socket.setPoller(this);
-            NioSocketWrapper ka = new NioSocketWrapper(socket, NioEndpoint.this);
+            NioSocketWrapper ka = new NioSocketWrapper(socket, NioEndpoint.this);//TODO: 包装
             socket.setSocketWrapper(ka);
             ka.setPoller(this);
             ka.setReadTimeout(getSocketProperties().getSoTimeout());
@@ -776,13 +786,13 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
             ka.setReadTimeout(getConnectionTimeout());
             ka.setWriteTimeout(getConnectionTimeout());
             PollerEvent r = eventCache.pop();
-            ka.interestOps(SelectionKey.OP_READ);//this is what OP_REGISTER turns into.
+            ka.interestOps(SelectionKey.OP_READ);//this is what OP_REGISTER turns into. //TODO:注册到selector上的感兴趣事件集
             if ( r==null) {
-                r = new PollerEvent(socket,ka,OP_REGISTER);
+                r = new PollerEvent(socket,ka,OP_REGISTER); //TODO:
             } else {
                 r.reset(socket,ka,OP_REGISTER);
             }
-            addEvent(r);
+            addEvent(r);//TODO:添加event
         }
 
         public NioSocketWrapper cancelledKey(SelectionKey key) {
@@ -914,6 +924,9 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
             getStopLatch().countDown();
         }
 
+        /**
+         * TODO:
+         * */
         protected void processKey(SelectionKey sk, NioSocketWrapper attachment) {
             try {
                 if (close) {
@@ -1158,6 +1171,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
         private volatile long lastRead = System.currentTimeMillis();
         private volatile long lastWrite = lastRead;
         private volatile boolean closed = false;
+
 
         public NioSocketWrapper(NioChannel channel, NioEndpoint endpoint) {
             super(channel, endpoint);
