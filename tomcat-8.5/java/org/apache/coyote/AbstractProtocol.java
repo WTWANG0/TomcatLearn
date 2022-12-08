@@ -48,6 +48,7 @@ import org.apache.tomcat.util.res.StringManager;
 
 /**
  * TODO:协议模板方法
+ * TODO: 协议处理器：协议格式 + 端点endpoint类型
  * */
 public abstract class AbstractProtocol<S> implements ProtocolHandler,
         MBeanRegistration {
@@ -1206,7 +1207,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                 }
                 long now = System.currentTimeMillis();
                 for (Processor processor : waitingProcessors) {
-                   processor.timeoutAsync(now);
+                   processor.timeoutAsync(now);//TODO:
                 }
 
                 // Loop if endpoint is paused

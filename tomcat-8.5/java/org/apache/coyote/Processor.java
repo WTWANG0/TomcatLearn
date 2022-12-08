@@ -26,6 +26,7 @@ import org.apache.tomcat.util.net.SocketWrapperBase;
 
 /**
  * Common interface for processors of all protocols.
+ * 用来处理所有协议的处理类
  */
 public interface Processor {
 
