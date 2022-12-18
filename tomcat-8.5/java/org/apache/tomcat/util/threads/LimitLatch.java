@@ -43,6 +43,7 @@ public class LimitLatch {
 
         /**
          * TODO: Shared
+         * 每次连接一次，count.incrementAndGet();
          * */
         @Override
         protected int tryAcquireShared(int ignored) {

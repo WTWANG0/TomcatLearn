@@ -708,7 +708,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
         private final AbstractProtocol<S> proto;
         private final RequestGroupInfo global = new RequestGroupInfo();
         private final AtomicLong registerCount = new AtomicLong(0);
-        private final Map<S,Processor> connections = new ConcurrentHashMap<>();
+        private final Map<S,Processor> connections = new ConcurrentHashMap<>(); //todo：一个NIO channel对应一个process【处理所有socket读写请求】
         private final RecycledProcessors recycledProcessors = new RecycledProcessors(this);
 
         public ConnectionHandler(AbstractProtocol<S> proto) {
@@ -897,7 +897,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                     }
                 } while ( state == SocketState.UPGRADING);
 
-                if (state == SocketState.LONG) {
+                if (state == SocketState.LONG) { //长连接
                     // In the middle of processing a request/response. Keep the
                     // socket associated with the processor. Exact requirements
                     // depend on type of long poll

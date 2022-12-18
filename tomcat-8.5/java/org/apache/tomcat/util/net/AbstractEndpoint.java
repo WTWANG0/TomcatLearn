@@ -1331,8 +1331,7 @@ public abstract class AbstractEndpoint<S> {
     }
 
     /**
-     * TODO:
-     *
+     * TODO:if we have reached max connections, wait
      * */
     protected void countUpOrAwaitConnection() throws InterruptedException {
         if (maxConnections==-1) { //不开启线程

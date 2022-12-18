@@ -220,6 +220,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
     @Override
     public void bind() throws Exception {
 
+        //1:用不到这块
         if (!getUseInheritedChannel()) {
             serverSock = ServerSocketChannel.open();
             socketProperties.setProperties(serverSock.socket());
@@ -884,7 +885,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                     }
                     if (close) {
                         events();
-                        timeout(0, false);
+                        timeout(0, false); //todo:无条件进入timeout处理
                         try {
                             selector.close();
                         } catch (IOException ioe) {
@@ -936,7 +937,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                         if ( attachment.getSendfileData() != null ) {
                             processSendfile(sk,attachment, false);
                         } else {
-                            unreg(sk, attachment, sk.readyOps());
+                            unreg(sk, attachment, sk.readyOps()); //TODO: 避免多线程同时处理
                             boolean closeSocket = false;
                             // Read goes before write
                             if (sk.isReadable()) {
@@ -1649,7 +1650,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
 
                 try {
                     if (key != null) {
-                        if (socket.isHandshakeComplete()) {
+                        if (socket.isHandshakeComplete()) { //todo:永远true
                             // No TLS handshaking required. Let the handler
                             // process this socket / event combination.
                             handshake = 0;

@@ -1,0 +1,103 @@
+  
+【ContainerBase】
+  public void addChild(Container child) {
+
+
+  initInternal
+
+  startInternal
+
+  getParentClassLoader
+
+
+  【Bootstrap】
+  	 Bootstrap bootstrap = new Bootstrap();、
+  	 bootstrap.init(); 初始化类加载器
+  	 bootstrap.load(); 间接调用catalina，创建对象树，然后调用生命周期的init方法，初始化整个对象树
+  	 bootstrap.start(); 间接调用catalina的start方法，然后调用生命周期的start方法启动整个对象树
+
+
+  	 createClassLoader
+
+  	 WebappClassLoader
+
+
+【Catalina】
+	getParentClassLoader
+
+	protected ClassLoader parentClassLoader = 		  Catalina.class.getClassLoader();
+
+	setParentClassLoader
+        
+
+
+Bootstrap  catalinaLoader = createClassLoader("server", commonLoader);
+
+
+
+StandardContext  
+postWorkDirectory
+
+
+WebappClassLoader 
+	WebappClassLoader result = new WebappClassLoader(getParent());
+
+
+
+	————————————————————————————————————————————
+
+【Bootstrap】
+	 load()
+
+
+
+
+【Catalina】
+	 load()
+
+
+配置文件.xml，每一个节点代表一个组件，组件是一个对象 --->节点是一个对象，节点的属性等价于对象的属性
+
+
+
+【StandardContext】
+startInternal--> postWorkDirectory --> 
+
+
+
+
+invoke_shutdown_hooks
+
+
+--------------------------------------------------------
+【Server】
+
+StandardServer
+  await
+  initInternal
+  stopAwait
+
+ 【Service】
+ 	StandardService
+
+ 【Connector】
+ 	协议是定义数据格式的规范
+
+ 	【ProtocolHandler】
+
+ 	http2.0 alan  upgrade   协议升级，在原有协议的基础上进行升级
+
+ 	AbstractProtocol
+
+ 	协议处理器：协议格式 + 端点endpoint类型
+
+ 	Processor 用来处理所有协议的处理类   Http11Processor
+
+ 	AsyncTimeout
+
+ 	AbstractHttp11Protocol
+
+ 	NIO 面向通道编程
+
+
+ 	Handler 处理连接
