@@ -95,9 +95,77 @@ StandardServer
 
  	AsyncTimeout
 
- 	AbstractHttp11Protocol
 
  	NIO 面向通道编程
 
 
+
+
+ 	AbstractHttp11Protocol
  	Handler 处理连接
+
+ 	acceptorThreadCount 接收线程
+
+
+ 	startAcceptorThreads
+
+
+【LimitLatch】
+
+ 	tryAcquireShared
+
+
+countUpOrAwaitConnection
+
+countDownConnection
+
+
+[Nio2Endpoint]
+	startAcceptorThreads
+
+	Acceptor
+
+
+	NioSocketWrapper -- SocketWrapperBase [定义了与socket相关的东西]
+
+
+
+
+	SynchronousQueue
+	SynchronizedQueue
+
+
+	【poller】
+		run	
+			 processKey(sk, socketWrapper);
+			 timeout(keyCount,hasEvents);
+			 processSocket、
+			 	SocketEvent
+
+
+
+【Selector】 【SelectorImpl】
+A multiplexor of SelectableChannel objects.  一个多路复用器选择SelectableChannel
+
+
+SocketProcessor  -- doRun
+ getHandler().process(socketWrapper, SocketEvent.CONNECT_FAIL);
+
+
+ ConnectionHandler 处理
+
+
+【AbstractProtocol】
+ process
+ state = processor.process(wrapper, status);
+
+
+【AbstractProcessorLight】
+	 protected abstract SocketState service(SocketWrapperBase<?> socketWrapper) throws IOException;
+
+
+【Http11Processor】
+
+【AbstractProcessor】
+
+【Request】
